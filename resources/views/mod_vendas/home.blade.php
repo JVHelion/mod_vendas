@@ -31,10 +31,14 @@
         <div class='text-left mt-5'>
             <h3>Seção de Vendas</h3>
             <h4 class='mt-3'>Selecione o Usuário</h4>
-            <div>SELECT2-Selecione o Cliente</div>
+            <select id="select_cliente" class="form-select">
+                <option value="">Selecione o Cliente</option>
+            </select>
             <h4 class='mt-3'>Selecione os Produtos</h4>
             <div class="row">
-                <div class="col">SELECT2-Selecione o Produto</div>
+                <select id="select_produto" class="form-select">
+                    <option value="">Selecione o Produto</option>
+                </select>
                 <div class="col">Selecione a Quantidade</div>
                 <div class="col">Adicionar</div>
                 <hr>
@@ -227,16 +231,52 @@
                 })
                 .then(response => response.json())
                 .then(resposta => {
-                     mostrarSucesso();
+                    mostrarSucesso();
                     console.log('Funfou o post de criar Produto', resposta);
                 })
                 .catch(erro => {
-                     mostrarFalha();
+                    mostrarFalha();
                     console.error('Deu errado', erro);
                 });
         }
         /**
          * POST CRIAR PRODUTO
+         * FINAL
+         */
+
+        /**
+         * INICIO
+         * LISTAR USUARIOS PRODUTOS
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            // Preencher clientes
+            fetch('/mod_vendas/listar_usuarios')
+                .then(response => response.json())
+                .then(usuarios => {
+                    const select = document.getElementById('select_cliente');
+                    usuarios.forEach(usuario => {
+                        const option = document.createElement('option');
+                        option.value = usuario.id;
+                        option.textContent = usuario.name;
+                        select.appendChild(option);
+                    });
+                });
+
+            // Preencher produtos
+            fetch('/mod_vendas/listar_produtos')
+                .then(response => response.json())
+                .then(produtos => {
+                    const select = document.getElementById('select_produto');
+                    produtos.forEach(produto => {
+                        const option = document.createElement('option');
+                        option.value = produto.id;
+                        option.textContent = produto.nome_produto;
+                        select.appendChild(option);
+                    });
+                });
+        });
+        /**
+         * LISTAR USUARIO PRODUTOS
          * FINAL
          */
     </script>

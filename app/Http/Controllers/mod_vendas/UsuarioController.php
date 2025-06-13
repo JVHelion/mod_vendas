@@ -24,4 +24,10 @@ class UsuarioController extends Controller
             'cpf' => $cpf
         ]);
     }
+
+    public function listarUsuarios()
+    {
+        $usuarios = \App\Models\User::select('id', 'name')->get();
+        return response()->json($usuarios);
+    }
 }

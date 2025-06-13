@@ -21,4 +21,10 @@ class ProdutoController extends Controller
             'nome' => $produto->nome_produto,
         ]);
     }
+
+    public function listarProdutos(Request $request)
+    {
+        $produtos = \App\Models\mod_vendas\Produto::select('id', 'nome_produto')->get();
+        return response()->json($produtos);
+    }
 }

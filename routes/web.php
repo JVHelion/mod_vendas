@@ -11,4 +11,6 @@ Route::get('/', function () {
 Route::group(['prefix' => 'mod_vendas'], function (){
     Route::post('criar_usuario', [UsuarioController::class, 'criarUsuario']);
     Route::post('criar_produto', [ProdutoController::class, 'criarProduto']);
+    Route::get('listar_usuarios', [UsuarioController::class, 'listarUsuarios']);
+    Route::get('listar_produtos', [ProdutoController::class, 'listarProdutos']);
 });
