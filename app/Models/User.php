@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'mod_vendas_cpf',
     ];
 
     /**
