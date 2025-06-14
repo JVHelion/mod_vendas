@@ -7,48 +7,78 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Módulo de Vendas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs5/dt-2.0.8/datatables.min.css" />
 </head>
 
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col">
+        <div class='dobra-1 d-flex justify-content-center align-items-center' style='height: 100vh;'>
+            <div>
+                <div class="row">
 
-            </div>
-            <div class="col-6 text-center">
-                <h1>Bem vindo ao Módulo de Vendas!</h1><br>
-                <h2>Feito por: João Helion</h2>
-            </div>
-            <div class="col">
+                    <div class="col-12 text-center">
+                        <h1>Bem vindo ao Módulo de Vendas!</h1><br>
+                        <h2>Feito por: João Helion</h2>
+                    </div>
 
+                </div>
+                <div class='text-center mt-5'>
+                    <h3>Seção de Criação</h3>
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#criarUsuarioModal">Criar Usuário</button>
+                    <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#criarProdutoModal">Criar Produto</button>
+                </div>
+                <div class="animado text-center mt-5 animate__animated animate__bounce animate__infinite">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"></path>
+                        <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"></path>
+                    </svg>
+
+                </div>
             </div>
         </div>
-        <div class='text-center mt-5'>
-            <h3>Seção de Criação</h3>
-            <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#criarUsuarioModal">Criar Usuário</button>
-            <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#criarProdutoModal">Criar Produto</button>
-        </div>
-        <div class='text-left mt-5'>
+
+        <div class='text-left'>
             <h3>Seção de Vendas</h3>
             <h4 class='mt-3'>Selecione o Usuário</h4>
             <select id="select_cliente" class="form-select">
                 <option value="">Selecione o Cliente</option>
             </select>
-            <h4 class='mt-3'>Selecione os Produtos</h4>
-            <div class="row">
-                <select id="select_produto" class="form-select">
-                    <option value="">Selecione o Produto</option>
-                </select>
-                <div class="col">Selecione a Quantidade</div>
-                <div class="col">Adicionar</div>
-                <hr>
-                <div>
-                    <p>Subtotal: R$:<span id='subtotal_da_linha'>123</span></p>
+            <h4 class='mt-3'>Realizar Vendas</h4>
+            <div class='col d-flex gap-4'>
+                <div class=' flex-fill'>
+                    <div class="col">Selecione o Produto</div>
+                    <select id="select_produto" class="form-select">
+                        <option value=""></option>
+                    </select>
                 </div>
+                <div>
+                    <div class="col">Selecione a Quantidade</div>
+                    <input type="number" id="quantidade_produto" class="form-control" min="1" step="1" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
+                <div>
+                    <div class="col">Valor Unitário</div>
+                    <input type="text" id="valor_unitario_produto" class="form-control" placeholder="0,00" oninput="this.value = this.value.replace(/[^0-9,]/g, '').replace(/(,.*?),/g, '$1');">
+                </div>
+                <button type="button" class="btn btn-success mt-4" onclick="adicionarPedido()">Adicionar</button>
             </div>
-            <h4>Seção de Pedidos:</h4>
-            <p>ID, CODIGO DO PRODUTO, NOME, QUANTIDADE, VALOR, SUBTOTAL, EXCLUIR, EDITAR</p>
-
+            <h4 class='mt-3'>Seção de Pedidos:</h4>
+            <table id="tabela-pedidos" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unitário</th>
+                        <th>Subtotal</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+            </table>
+            <hr>
+            <div class='col text-end'>
+                <span>Subtotal: R$:<span id='subtotal_da_linha'>123</span></span>
+            </div>
+            <button type="button" class="btn btn-primary mt-4 col text-end" onclick="enviarPedidos()">Enviar Pedidos</button>
             <!-- Modal Criar Produto -->
             <div class="modal fade" id="criarProdutoModal" tabindex="-1" aria-labelledby="criarProdutoModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -126,161 +156,47 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Modal Editar Pedido -->
+            <div class="modal fade" id="editarPedidoModal" tabindex="-1" aria-labelledby="editarPedidoModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarPedidoModalLabel">Editar Pedido</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formEditarPedido">
+                                <div class="mb-3">
+                                    <label for="editar_produto" class="form-label">Produto</label>
+                                    <select id="editar_produto" class="form-select"></select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editar_quantidade" class="form-label">Quantidade</label>
+                                    <input type="number" id="editar_quantidade" class="form-control" min="1" step="1">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editar_valor_unitario" class="form-label">Valor Unitário</label>
+                                    <input type="text" id="editar_valor_unitario" class="form-control" placeholder="0,00">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="salvarEdicaoPedido">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <script>
-        /**
-         * INICIO
-         * Mascaras para formulários
-         */
-        //Máscara para CPF
-        function cpf(v) {
-            v = v.replace(/\D/g, "") //Remove tudo o que não é dígito
-            v = v.replace(/(\d{3})(\d)/, "$1.$2") //Coloca um ponto entre o terceiro e o quarto dígitos
-            v = v.replace(/(\d{3})(\d)/, "$1.$2") //Coloca um ponto entre o terceiro e o quarto dígitos
-            //de novo (para o segundo bloco de números)
-            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
-            return v
-        }
 
-        document.getElementById('cpf_de_usuario_novo').addEventListener('input', function() {
-            this.value = cpf(this.value);
-        });
 
-        //Máscara para nome
-        function limparNome(v) {
-            return v.replace(/[^a-zA-ZÀ-ÿ\s]/g, ''); // Remove tudo que não for letra ou espaço
-        }
-
-        document.getElementById('nome_de_usuario_novo').addEventListener('input', function() {
-            this.value = limparNome(this.value);
-        });
-        /**
-         * Mascaras para formulários
-         * FINAL
-         */
-
-        /**
-         * INICIO
-         * POP-UPS
-         */
-        // Função para mostrar modal de sucesso
-        function mostrarSucesso() {
-            var modal = new bootstrap.Modal(document.getElementById('modalSucesso'));
-            modal.show();
-        }
-        // Função para mostrar modal de falha
-        function mostrarFalha() {
-            var modal = new bootstrap.Modal(document.getElementById('modalFalha'));
-            modal.show();
-        }
-        /**
-         * POP-UPS
-         * FINAL
-         */
-
-        /**
-         * INICIO
-         * POST CRIAR USUARIO
-         */
-        function criarUsuario() {
-            const dados = {
-                nome_usuario_novo: document.getElementById('nome_de_usuario_novo').value,
-                cpf_usuario_novo: document.getElementById('cpf_de_usuario_novo').value
-            };
-
-            fetch('/mod_vendas/criar_usuario', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify(dados)
-                })
-                .then(response => response.json())
-                .then(resposta => {
-                    mostrarSucesso();
-                    console.log('Funfou o post de criar usuario', resposta);
-                })
-                .catch(erro => {
-                    mostrarFalha();
-                    console.error('Deu errado', erro);
-                });
-        }
-        /**
-         * POST CRIAR USUARIO
-         * FINAL
-         */
-
-        /**
-         * INICIO
-         * POST CRIAR PRODUTO
-         */
-        function criarProduto() {
-            const dados = {
-                nome_Produto_novo: document.getElementById('nome_de_produto_novo').value
-            };
-
-            fetch('/mod_vendas/criar_produto', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify(dados)
-                })
-                .then(response => response.json())
-                .then(resposta => {
-                    mostrarSucesso();
-                    console.log('Funfou o post de criar Produto', resposta);
-                })
-                .catch(erro => {
-                    mostrarFalha();
-                    console.error('Deu errado', erro);
-                });
-        }
-        /**
-         * POST CRIAR PRODUTO
-         * FINAL
-         */
-
-        /**
-         * INICIO
-         * LISTAR USUARIOS PRODUTOS
-         */
-        document.addEventListener('DOMContentLoaded', function() {
-            // Preencher clientes
-            fetch('/mod_vendas/listar_usuarios')
-                .then(response => response.json())
-                .then(usuarios => {
-                    const select = document.getElementById('select_cliente');
-                    usuarios.forEach(usuario => {
-                        const option = document.createElement('option');
-                        option.value = usuario.id;
-                        option.textContent = usuario.name;
-                        select.appendChild(option);
-                    });
-                });
-
-            // Preencher produtos
-            fetch('/mod_vendas/listar_produtos')
-                .then(response => response.json())
-                .then(produtos => {
-                    const select = document.getElementById('select_produto');
-                    produtos.forEach(produto => {
-                        const option = document.createElement('option');
-                        option.value = produto.id;
-                        option.textContent = produto.nome_produto;
-                        select.appendChild(option);
-                    });
-                });
-        });
-        /**
-         * LISTAR USUARIO PRODUTOS
-         * FINAL
-         */
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1/dist/cleave.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.8/datatables.min.js"></script>
+    <script src="public/js/mod_vendas/home.js?cache=<?= time() ?>"></script>
 </body>
 
 </html>
