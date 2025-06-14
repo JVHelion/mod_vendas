@@ -30,4 +30,20 @@ class UsuarioController extends Controller
         $usuarios = \App\Models\User::select('id', 'name')->get();
         return response()->json($usuarios);
     }
+
+    public function buscarUsuarios(Request $request)
+    {
+        $validated = $request->validate([
+            'term' => 'nullable|string|max:100'
+        ]);
+
+        $search = $validated['term'] ?? '';
+
+        $usuarios = User::where('name', 'like', '%' . $search . '%')
+            ->select('id', 'name as text')
+            ->limit(20)
+            ->get();
+
+        return response()->json(['results' => $usuarios]);
+    }
 }

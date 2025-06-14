@@ -120,7 +120,7 @@ function atualizarSelectProdutos() {
         .then((response) => response.json())
         .then((produtos) => {
             const select = document.getElementById("select_produto");
-            select.innerHTML = '<option value="">Selecione o Produto</option>'
+            select.innerHTML = '<option value="">Selecione o Produto</option>';
             produtos.forEach((produto) => {
                 const option = document.createElement("option");
                 option.value = produto.id;
@@ -164,9 +164,16 @@ function adicionarPedido() {
     const produtoId = selectProduto.value;
     const produtoNome = selectProduto.options[selectProduto.selectedIndex].text;
     const quantidade = document.getElementById("quantidade_produto").value;
-    const valorUnitario = document.getElementById("valor_unitario_produto").value.replace('.', '').replace(',', '.');
-    const valorUnitarioFormatado = document.getElementById("valor_unitario_produto").value;
-    const subtotal = (parseFloat(valorUnitario) * parseInt(quantidade)).toFixed(2);
+    const valorUnitario = document
+        .getElementById("valor_unitario_produto")
+        .value.replace(".", "")
+        .replace(",", ".");
+    const valorUnitarioFormatado = document.getElementById(
+        "valor_unitario_produto"
+    ).value;
+    const subtotal = (parseFloat(valorUnitario) * parseInt(quantidade)).toFixed(
+        2
+    );
 
     if (!produtoId || !quantidade || !valorUnitario) {
         mostrarFalha();
@@ -178,26 +185,10 @@ function adicionarPedido() {
         produtoNome,
         quantidade,
         valorUnitario: valorUnitarioFormatado,
-        subtotal: subtotal.replace('.', ',')
+        subtotal: subtotal.replace(".", ","),
     });
 
     atualizarTabelaPedidos();
-}
-
-// Atualizar o dataTable
-function atualizarTabelaPedidos() {
-    tabelaPedidos.clear();
-    pedidos.forEach((pedido, index) => {
-        tabelaPedidos.row.add([
-            pedido.produtoNome,
-            pedido.quantidade,
-            pedido.valorUnitario,
-            pedido.subtotal,
-            `<button class="btn btn-warning btn-sm" onclick="editarPedido(${index})">Editar</button>
-             <button class="btn btn-danger btn-sm" onclick="excluirPedido(${index})">Excluir</button>`
-        ]);
-    });
-    tabelaPedidos.draw();
 }
 
 function excluirPedido(index) {
@@ -214,7 +205,7 @@ function editarPedido(index) {
         .then((response) => response.json())
         .then((produtos) => {
             const select = document.getElementById("editar_produto");
-            select.innerHTML = '';
+            select.innerHTML = "";
             produtos.forEach((produto) => {
                 const option = document.createElement("option");
                 option.value = produto.id;
@@ -224,11 +215,15 @@ function editarPedido(index) {
             });
 
             // Preencher os outros campos
-            document.getElementById("editar_quantidade").value = pedido.quantidade;
-            document.getElementById("editar_valor_unitario").value = pedido.valorUnitario;
+            document.getElementById("editar_quantidade").value =
+                pedido.quantidade;
+            document.getElementById("editar_valor_unitario").value =
+                pedido.valorUnitario;
 
             // Abrir o modal
-            var modal = new bootstrap.Modal(document.getElementById("editarPedidoModal"));
+            var modal = new bootstrap.Modal(
+                document.getElementById("editarPedidoModal")
+            );
             modal.show();
         });
 }
@@ -256,30 +251,40 @@ function enviarPedidos() {
         });
 }
 
-document.getElementById("salvarEdicaoPedido").addEventListener("click", function () {
-    if (indexEditando === null) return;
+document
+    .getElementById("salvarEdicaoPedido")
+    .addEventListener("click", function () {
+        if (indexEditando === null) return;
 
-    const select = document.getElementById("editar_produto");
-    const produtoId = select.value;
-    const produtoNome = select.options[select.selectedIndex].text;
-    const quantidade = document.getElementById("editar_quantidade").value;
-    const valorUnitario = document.getElementById("editar_valor_unitario").value;
-    const valorUnitarioFloat = valorUnitario.replace('.', '').replace(',', '.');
-    const subtotal = (parseFloat(valorUnitarioFloat) * parseInt(quantidade)).toFixed(2).replace('.', ',');
+        const select = document.getElementById("editar_produto");
+        const produtoId = select.value;
+        const produtoNome = select.options[select.selectedIndex].text;
+        const quantidade = document.getElementById("editar_quantidade").value;
+        const valorUnitario = document.getElementById(
+            "editar_valor_unitario"
+        ).value;
+        const valorUnitarioFloat = valorUnitario
+            .replace(".", "")
+            .replace(",", ".");
+        const subtotal = (parseFloat(valorUnitarioFloat) * parseInt(quantidade))
+            .toFixed(2)
+            .replace(".", ",");
 
-    pedidos[indexEditando] = {
-        produtoId,
-        produtoNome,
-        quantidade,
-        valorUnitario,
-        subtotal
-    };
+        pedidos[indexEditando] = {
+            produtoId,
+            produtoNome,
+            quantidade,
+            valorUnitario,
+            subtotal,
+        };
 
-    atualizarTabelaPedidos();
-    indexEditando = null;
-    var modal = bootstrap.Modal.getInstance(document.getElementById("editarPedidoModal"));
-    modal.hide();
-});
+        atualizarTabelaPedidos();
+        indexEditando = null;
+        var modal = bootstrap.Modal.getInstance(
+            document.getElementById("editarPedidoModal")
+        );
+        modal.hide();
+    });
 /**
  * SISTEMA DE PEDIDOS
  * FINAL
@@ -287,15 +292,233 @@ document.getElementById("salvarEdicaoPedido").addEventListener("click", function
 
 /**
  * INICIO
+ * CALCULA TOTAL
+ */
+function atualizarTabelaPedidos() {
+    tabelaPedidos.clear();
+    let total = 0;
+    pedidos.forEach((pedido, index) => {
+        tabelaPedidos.row.add([
+            pedido.produtoNome,
+            pedido.quantidade,
+            pedido.valorUnitario,
+            pedido.subtotal,
+            `<button class="btn btn-warning btn-sm" onclick="editarPedido(${index})">Editar</button>
+             <button class="btn btn-danger btn-sm" onclick="excluirPedido(${index})">Excluir</button>`,
+        ]);
+        total += parseFloat(pedido.subtotal.replace(",", "."));
+    });
+    tabelaPedidos.draw();
+    document.getElementById("total_da_linha").textContent =
+        total.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+}
+/**
+ * CALCULA TOTAL
+ * FINAL
+ */
+
+/**
+ * INICIO
+ * PESQUISA USUARIO
+ */
+
+$(document).ready(function () {
+    $("#select_cliente").select2({
+        theme: "bootstrap4",
+        placeholder: "Selecione o Cliente",
+        ajax: {
+            url: "/mod_vendas/buscar_usuarios",
+            dataType: "json",
+            delay: 250,
+            data: function (params) {
+                return {
+                    term: params.term, // termo digitado
+                };
+            },
+            processResults: function (data) {
+                return data;
+            },
+            cache: true,
+        },
+        minimumInputLength: 1,
+    });
+});
+
+/**
+ * PESQUISA USUARIO
+ * FINAL
+ */
+
+/**
+ * INICIO
+ * PESQUISA PRODUTO
+ */
+
+$(document).ready(function () {
+    $("#select_produto").select2({
+        theme: "bootstrap4",
+        placeholder: "Selecione o Produto",
+        ajax: {
+            url: "/mod_vendas/buscar_produtos",
+            dataType: "json",
+            delay: 250,
+            data: function (params) {
+                return {
+                    term: params.term,
+                };
+            },
+            processResults: function (data) {
+                return data;
+            },
+            cache: true,
+        },
+        minimumInputLength: 1,
+    });
+});
+
+/**
+ * PESQUISA PRODUTO
+ * FINAL
+ */
+
+/**
+ * INICIO
+ * PAGAMENTO
+ */
+
+function parcelamentos() {
+    document.getElementById("parcelasContainer").innerHTML = "";
+    document.getElementById("totalParcelas").textContent = "0,00";
+    document.getElementById("totalVendaResumo").textContent =
+    document.getElementById("total_da_linha").textContent;
+
+    adicionarCampoParcela();
+
+    var modal = new bootstrap.Modal(document.getElementById("modalPagamento"));
+    modal.show();
+}
+
+// Adiciona um campo de parcela
+function adicionarCampoParcela() {
+    const totalVenda = parseFloat(document.getElementById("total_da_linha").textContent.replace('.', '').replace(',', '.'));
+    const totalParcelas = parseFloat(document.getElementById("totalParcelas").textContent.replace('.', '').replace(',', '.'));
+    const container = document.getElementById("parcelasContainer");
+    const idx = container.children.length + 1;
+    const div = document.createElement("div");
+
+    if (totalParcelas >= totalVenda) {
+        mostrarFalha();
+        return;
+    }
+
+    div.className = "row mb-2 align-items-end";
+    div.innerHTML = `
+        <div class="col-5">
+            <label>Qtd</label>
+            <input type="number" min="1" value="1" class="form-control parcela-qtd" />
+        </div>
+        <div class="col-5">
+            <label>Valor</label>
+            <input type="text" class="form-control parcela-valor" placeholder="0,00" />
+        </div>
+        <div class="col-2">
+            <button type="button" class="btn btn-danger btn-sm removerParcela">X</button>
+        </div>
+    `;
+    container.appendChild(div);
+
+    // Máscara Do valor
+    new Cleave(div.querySelector(".parcela-valor"), {
+        numeral: true,
+        numeralThousandsGroupStyle: "thousand",
+        delimiter: ".",
+        numeralDecimalMark: ",",
+        numeralDecimalScale: 2,
+    });
+
+    // Botão para tirar parcela
+    div.querySelector(".removerParcela").onclick = function () {
+        div.remove();
+        atualizarTotalParcelas();
+    };
+
+    // Monitora digitação
+    div.querySelector(".parcela-qtd").oninput = atualizarTotalParcelas;
+    div.querySelector(".parcela-valor").oninput = atualizarTotalParcelas;
+    atualizarTotalParcelas();
+}
+
+// Atualiza o total das parcelas
+function atualizarTotalParcelas() {
+    let total = 0;
+    document.querySelectorAll("#parcelasContainer .row").forEach((row) => {
+        const qtd = parseInt(row.querySelector(".parcela-qtd").value) || 0;
+        const valor = row
+            .querySelector(".parcela-valor")
+            .value.replace(".", "")
+            .replace(",", ".");
+        total += qtd * (parseFloat(valor) || 0);
+    });
+    document.getElementById("totalParcelas").textContent = total.toLocaleString(
+        "pt-BR",
+        { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+    );
+}
+
+// Botão para adicionar nova parcela
+document.getElementById("adicionarParcela").onclick = adicionarCampoParcela;
+
+// Atualiza total ao editar parcelas
+document.getElementById("parcelasContainer").oninput = atualizarTotalParcelas;
+
+// Botão confirmar pagamento
+document.getElementById("confirmarPagamento").onclick = function () {
+    let parcelas = [];
+    let totalParcelas = 0;
+    document.querySelectorAll("#parcelasContainer .row").forEach((row) => {
+        const qtd = parseInt(row.querySelector(".parcela-qtd").value) || 0;
+        const valor = row.querySelector(".parcela-valor").value;
+        const valorFloat = parseFloat(valor.replace('.', '').replace(',', '.')) || 0;
+        if (qtd > 0 && valor) {
+            parcelas.push({ qtd, valor });
+            totalParcelas += qtd * valorFloat;
+        }
+    });
+
+    const totalVenda = parseFloat(document.getElementById("total_da_linha").textContent.replace('.', '').replace(',', '.'));
+
+    if (Math.abs(totalParcelas - totalVenda) > 0.01) {
+        mostrarFalha();
+        alert("O total das parcelas deve ser igual ao total da venda!");
+        return;
+    }
+
+    // ...restante do código...
+    var modal = bootstrap.Modal.getInstance(
+        document.getElementById("modalPagamento")
+    );
+    modal.hide();
+    mostrarSucesso();
+};
+/**
+ * PAGAMENTO
+ * FINAL
+ */
+
+/**
+ * INICIO
  * TODOS OS CARREGAMENTOS DE DOM
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Inicializa DataTable
-    tabelaPedidos = new DataTable('#tabela-pedidos', {
+    tabelaPedidos = new DataTable("#tabela-pedidos", {
         searching: false,
         paging: false,
         info: false,
-        ordering: false
+        ordering: false,
     });
 
     // Máscara Cleave.js
@@ -321,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
         numeralThousandsGroupStyle: "thousand",
         delimiter: ".",
         numeralDecimalMark: ",",
-        numeralDecimalScale: 2
+        numeralDecimalScale: 2,
     });
 
     // Preencher selects
@@ -329,12 +552,16 @@ document.addEventListener('DOMContentLoaded', function() {
     atualizarSelectProdutos();
 
     // Máscaras para CPF e nome
-    document.getElementById("cpf_de_usuario_novo").addEventListener("input", function () {
-        this.value = cpf(this.value);
-    });
-    document.getElementById("nome_de_usuario_novo").addEventListener("input", function () {
-        this.value = limparNome(this.value);
-    });
+    document
+        .getElementById("cpf_de_usuario_novo")
+        .addEventListener("input", function () {
+            this.value = cpf(this.value);
+        });
+    document
+        .getElementById("nome_de_usuario_novo")
+        .addEventListener("input", function () {
+            this.value = limparNome(this.value);
+        });
 });
 /**
  * TODOS OS CARREGAMENTOS DE DOM

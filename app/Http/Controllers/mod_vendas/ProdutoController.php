@@ -27,4 +27,20 @@ class ProdutoController extends Controller
         $produtos = \App\Models\mod_vendas\Produto::select('id', 'nome_produto')->get();
         return response()->json($produtos);
     }
+
+    public function buscarProdutos(Request $request)
+    {
+        $validated = $request->validate([
+            'term' => 'nullable|string|max:100'
+        ]);
+
+        $search = $validated['term'] ?? '';
+
+        $produtos = Produto::where('nome_produto', 'like', '%' . $search . '%')
+            ->select('id', 'nome_produto as text')
+            ->limit(20)
+            ->get();
+
+        return response()->json(['results' => $produtos]);
+    }
 }

@@ -17,7 +17,7 @@ Criar um sistema simples onde é possível criar registros de vendas de produtos
 ### Clientes
 
 #### **Campos:**
-a
+
 - [x] Cadastro
     - [x] Nome Completo
     - [x] CPF
@@ -38,11 +38,9 @@ SEÇÃO DE VENDA:
 
 - [x] Puxar uma lista de clientes existentes
 - [x] Puxar uma lista de produtos
-- [ ] Campo de quantidade(vir pré-preenchido)
-- [ ] Campo de valor unitário(vir pré-preenchido)
-- [ ] Subtotal
-- [ ] Adicionar
-    - [ ] Após adicionado, permitir editar e excluir produtos  
+- [x] Subtotal
+- [x] Adicionar
+    - [x] Após adicionado, permitir editar e excluir produtos  
         SEÇÃO PAGAMENTOS:
     - [ ] Quantidade de Parcelas
         - [ ] Valor da parcela  

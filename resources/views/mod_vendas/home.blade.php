@@ -8,7 +8,9 @@
     <title>Módulo de Vendas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/v/bs5/dt-2.0.8/datatables.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.6.2/dist/select2-bootstrap4.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -76,9 +78,11 @@
             </table>
             <hr>
             <div class='col text-end'>
-                <span>Subtotal: R$:<span id='subtotal_da_linha'>123</span></span>
+                <span>Total: R$:<span id='total_da_linha'>0,00</span></span>
             </div>
-            <button type="button" class="btn btn-primary mt-4 col text-end" onclick="enviarPedidos()">Enviar Pedidos</button>
+            <button type="button" class="btn btn-primary mt-4 col text-end" onclick="parcelamentos()">Pagamento</button>
+
+
             <!-- Modal Criar Produto -->
             <div class="modal fade" id="criarProdutoModal" tabindex="-1" aria-labelledby="criarProdutoModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -156,7 +160,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Modal Editar Pedido -->
             <div class="modal fade" id="editarPedidoModal" tabindex="-1" aria-labelledby="editarPedidoModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -188,6 +192,36 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Modal Pagamento -->
+            <div class="modal fade" id="modalPagamento" tabindex="-1" aria-labelledby="modalPagamentoLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalPagamentoLabel">Pagamento</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formParcelas">
+                                <div id="parcelasContainer">
+                                    <!-- Campos de parcelas serão adicionados aqui -->
+                                </div>
+                                <button type="button" class="btn btn-secondary mt-2" id="adicionarParcela">Adicionar Parcela</button>
+                            </form>
+                            <div class="mt-3">
+                                <strong>Total das parcelas: R$ <span id="totalParcelas">0,00</span></strong>
+                            </div>
+                            <div class="mt-1">
+                                <small>Total da venda: R$ <span id="totalVendaResumo">0,00</span></small>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="confirmarPagamento">Confirmar Pagamento</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -196,6 +230,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/cleave.js@1/dist/cleave.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/dt-2.0.8/datatables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="public/js/mod_vendas/home.js?cache=<?= time() ?>"></script>
 </body>
 
