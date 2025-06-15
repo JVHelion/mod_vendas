@@ -562,7 +562,17 @@ document.addEventListener("DOMContentLoaded", function () {
         .addEventListener("input", function () {
             this.value = limparNome(this.value);
         });
+
+        //aplica estilo no select2
+
+        document.querySelectorAll('.select2-container--bootstrap4').forEach(function(el) {
+            el.classList.add('form-control');
+        });
+
 });
+
+
+
 /**
  * TODOS OS CARREGAMENTOS DE DOM
  * FINAL
