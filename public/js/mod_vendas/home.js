@@ -393,7 +393,7 @@ function parcelamentos() {
     document.getElementById("parcelasContainer").innerHTML = "";
     document.getElementById("totalParcelas").textContent = "0,00";
     document.getElementById("totalVendaResumo").textContent =
-    document.getElementById("total_da_linha").textContent;
+        document.getElementById("total_da_linha").textContent;
 
     adicionarCampoParcela();
 
@@ -403,8 +403,18 @@ function parcelamentos() {
 
 // Adiciona um campo de parcela
 function adicionarCampoParcela() {
-    const totalVenda = parseFloat(document.getElementById("total_da_linha").textContent.replace('.', '').replace(',', '.'));
-    const totalParcelas = parseFloat(document.getElementById("totalParcelas").textContent.replace('.', '').replace(',', '.'));
+    const totalVenda = parseFloat(
+        document
+            .getElementById("total_da_linha")
+            .textContent.replace(".", "")
+            .replace(",", ".")
+    );
+    const totalParcelas = parseFloat(
+        document
+            .getElementById("totalParcelas")
+            .textContent.replace(".", "")
+            .replace(",", ".")
+    );
     const container = document.getElementById("parcelasContainer");
     const idx = container.children.length + 1;
     const div = document.createElement("div");
@@ -481,14 +491,20 @@ document.getElementById("confirmarPagamento").onclick = function () {
     document.querySelectorAll("#parcelasContainer .row").forEach((row) => {
         const qtd = parseInt(row.querySelector(".parcela-qtd").value) || 0;
         const valor = row.querySelector(".parcela-valor").value;
-        const valorFloat = parseFloat(valor.replace('.', '').replace(',', '.')) || 0;
+        const valorFloat =
+            parseFloat(valor.replace(".", "").replace(",", ".")) || 0;
         if (qtd > 0 && valor) {
             parcelas.push({ qtd, valor });
             totalParcelas += qtd * valorFloat;
         }
     });
 
-    const totalVenda = parseFloat(document.getElementById("total_da_linha").textContent.replace('.', '').replace(',', '.'));
+    const totalVenda = parseFloat(
+        document
+            .getElementById("total_da_linha")
+            .textContent.replace(".", "")
+            .replace(",", ".")
+    );
 
     if (Math.abs(totalParcelas - totalVenda) > 0.01) {
         mostrarFalha();
@@ -563,15 +579,14 @@ document.addEventListener("DOMContentLoaded", function () {
             this.value = limparNome(this.value);
         });
 
-        //aplica estilo no select2
+    //aplica estilo no select2
 
-        document.querySelectorAll('.select2-container--bootstrap4').forEach(function(el) {
-            el.classList.add('form-control');
+    document
+        .querySelectorAll(".select2-container--bootstrap4")
+        .forEach(function (el) {
+            el.classList.add("form-control");
         });
-
 });
-
-
 
 /**
  * TODOS OS CARREGAMENTOS DE DOM
