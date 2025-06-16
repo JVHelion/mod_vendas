@@ -491,8 +491,7 @@ document.getElementById("confirmarPagamento").onclick = function () {
     document.querySelectorAll("#parcelasContainer .row").forEach((row) => {
         const qtd = parseInt(row.querySelector(".parcela-qtd").value) || 0;
         const valor = row.querySelector(".parcela-valor").value;
-        const valorFloat =
-            parseFloat(valor.replace(".", "").replace(",", ".")) || 0;
+        const valorFloat = parseFloat(valor.replace(".", "").replace(",", ".")) || 0;
         if (qtd > 0 && valor) {
             parcelas.push({ qtd, valor });
             totalParcelas += qtd * valorFloat;
@@ -500,10 +499,7 @@ document.getElementById("confirmarPagamento").onclick = function () {
     });
 
     const totalVenda = parseFloat(
-        document
-            .getElementById("total_da_linha")
-            .textContent.replace(".", "")
-            .replace(",", ".")
+        document.getElementById("total_da_linha").textContent.replace(".", "").replace(",", ".")
     );
 
     if (Math.abs(totalParcelas - totalVenda) > 0.01) {
@@ -512,10 +508,9 @@ document.getElementById("confirmarPagamento").onclick = function () {
         return;
     }
 
-    // ...restante do código...
-    var modal = bootstrap.Modal.getInstance(
-        document.getElementById("modalPagamento")
-    );
+    enviarPedidoComPagamento(parcelas);
+
+    var modal = bootstrap.Modal.getInstance(document.getElementById("modalPagamento"));
     modal.hide();
     mostrarSucesso();
 };
@@ -578,17 +573,45 @@ document.addEventListener("DOMContentLoaded", function () {
         .addEventListener("input", function () {
             this.value = limparNome(this.value);
         });
-
-    //aplica estilo no select2
-
-    document
-        .querySelectorAll(".select2-container--bootstrap4")
-        .forEach(function (el) {
-            el.classList.add("form-control");
-        });
 });
 
 /**
  * TODOS OS CARREGAMENTOS DE DOM
+ * FINAL
+ */
+
+/**
+ * INICIO
+ * ENVIAR PEDIDO COM PAGAMENTO
+ */
+
+function enviarPedidoComPagamento(parcelas) {
+    fetch("/mod_vendas/adicionar_pedido", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+        },
+        body: JSON.stringify({
+            cliente_id: document.getElementById("select_cliente").value,
+            pedidos: pedidos, 
+            parcelas: parcelas
+        }),
+    })
+    .then((response) => response.json())
+    .then((resposta) => {
+        mostrarSucesso();
+        pedidos = [];
+        atualizarTabelaPedidos();
+        // Limpe também as parcelas se desejar
+    })
+    .catch((erro) => {
+        mostrarFalha();
+        console.error("Erro ao enviar pedido", erro);
+    });
+}
+
+/**
+ * ENVIAR PEDIDO PAGAMENTO
  * FINAL
  */

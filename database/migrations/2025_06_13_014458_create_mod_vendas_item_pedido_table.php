@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_pedido');
             $table->unsignedBigInteger('id_produto');
+            $table->integer('quantidade');
+            $table->decimal('valor_unitario', 10, 2);
             $table->timestamps();
         });
     }
