@@ -42,7 +42,7 @@ SEÇÃO DE VENDA:
 - [x] Adicionar
     - [x] Após adicionado, permitir editar e excluir produtos  
         SEÇÃO PAGAMENTOS:
-    - [ ] Quantidade de Parcelas
+    - [x] Quantidade de Parcelas
         - [ ] Valor da parcela  
             Obs. Deixar disponível a possibilidade de valores diferentes em parcelas: 2x $500 e 10x $100 totalizando 12 parcelas.
 
