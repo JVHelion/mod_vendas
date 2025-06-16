@@ -1,3 +1,4 @@
+# DOCUMENTAÇÃO
 # OBJETIVO
 
 Criar um sistema simples onde é possível criar registros de vendas de produtos.
@@ -94,6 +95,8 @@ erDiagram
         int id_item_pedido pk
         int id_pedido fk
         int id_produto fk
+        int quantidade
+        int valor_unitario
     }
     
     mod_vendas_item_pedido ||--|| mod_vendas_produto : id_produto

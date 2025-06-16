@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('mod_vendas_pedido', function (Blueprint $table){
             $table->foreign('id_users')->references('id')->on('users')->onDelete('cascade');
-            //$table->foreign('id_pagamento')->references('id')->on('mod_vendas_pagamento')->onDelete('cascade');
         });
 
         Schema::table('mod_vendas_item_pedido', function (Blueprint $table){
@@ -33,7 +32,6 @@ return new class extends Migration
     {
         Schema::table('mod_vendas_pedido', function (Blueprint $table) {
             $table->dropForeign(['id_users']);
-            //$table->dropForeign(['id_pagamento']);
         });
 
         Schema::table('mod_vendas_item_pedido', function (Blueprint $table){

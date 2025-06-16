@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('mod_vendas_pedido', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_users');
-            $table->unsignedBigInteger('id_pagamento');
             $table->timestamps();
         });
     }
