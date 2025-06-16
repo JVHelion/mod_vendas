@@ -108,7 +108,7 @@ https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstr
             </div>
 
             <!-- Modal Sucesso -->
-            <div class="modal fade z-3" id="modalSucesso" tabindex="-1" aria-labelledby="modalSucessoLabel" aria-hidden="true">
+            <div class="modal fade " id="modalSucesso" tabindex="-1" aria-labelledby="modalSucessoLabel" aria-hidden="true" style="z-index:1070;">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content bg-success text-white">
                         <div class="modal-header">
@@ -123,7 +123,7 @@ https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstr
             </div>
 
             <!-- Modal Falha -->
-            <div class="modal fade z-3" id="modalFalha" tabindex="-1" aria-labelledby="modalFalhaLabel" aria-hidden="true">
+            <div class="modal fade" id="modalFalha" tabindex="-1" aria-labelledby="modalFalhaLabel" aria-hidden="true" style="z-index:1070;">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content bg-danger text-white">
                         <div class="modal-header">
