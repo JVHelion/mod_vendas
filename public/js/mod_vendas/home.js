@@ -229,7 +229,7 @@ function editarPedido(index) {
 }
 
 function enviarPedidos() {
-    fetch("/mod_vendas/adicionar_pedido", {
+    fetch("/mod_vendas/criar_pedido", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -586,7 +586,7 @@ document.addEventListener("DOMContentLoaded", function () {
  */
 
 function enviarPedidoComPagamento(parcelas) {
-    fetch("/mod_vendas/adicionar_pedido", {
+    fetch("/mod_vendas/criar_pedido", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
