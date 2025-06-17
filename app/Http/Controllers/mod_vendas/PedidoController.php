@@ -36,7 +36,7 @@ class PedidoController extends Controller
             }
 
             \DB::commit();
-            return reponse()->json(['success' => true, 'pedido_id' => $pedido->id]);
+            return response()->json(['success' => true, 'pedido_id' => $pedido->id]);
         } catch (\Exception $e) {
             \DB::rollBack();
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);

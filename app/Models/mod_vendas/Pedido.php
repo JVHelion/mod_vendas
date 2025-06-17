@@ -9,4 +9,7 @@ class Pedido extends Model
 {
     use HasFactory;
     
+    protected $fillable = [
+        'id_users',
+    ];
 }
