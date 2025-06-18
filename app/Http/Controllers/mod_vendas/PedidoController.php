@@ -43,28 +43,3 @@ class PedidoController extends Controller
         }
     }
 }
-
-
-// [
-//     {
-//         "produtoId": "1",
-//         "produtoNome": "teste 1234",
-//         "quantidade": "12",
-//         "valorUnitario": "5",
-//         "subtotal": "60,00"
-//     },
-//     {
-//         "produtoId": "5",
-//         "produtoNome": "novo produto 3",
-//         "quantidade": "10",
-//         "valorUnitario": "7",
-//         "subtotal": "70,00"
-//     },
-//     {
-//         "produtoId": "6",
-//         "produtoNome": "Produto 1",
-//         "quantidade": "5",
-//         "valorUnitario": "30",
-//         "subtotal": "150,00"
-//     }
-// ]
