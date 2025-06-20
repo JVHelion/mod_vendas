@@ -45,7 +45,7 @@ SEÇÃO DE VENDA:
     - [x] Após adicionado, permitir editar e excluir produtos  
         SEÇÃO PAGAMENTOS:
     - [x] Quantidade de Parcelas
-        - [ ] Valor da parcela  
+        - [x] Valor da parcela  
             Obs. Deixar disponível a possibilidade de valores diferentes em parcelas: 2x $500 e 10x $100 totalizando 12 parcelas.
 
 ## Pedidos Realizados
@@ -67,9 +67,9 @@ Login de vendedor.(Usuário e Senha)
 
 ```mermaid
 erDiagram
-    
+
     users {
-        int id pk
+        int id PK
         string name
         string email
         timestamp email_verified_at
@@ -79,46 +79,44 @@ erDiagram
         timestamp updated_at
         string mod_vendas_cpf
     }
-    
-    users ||--o{ mod_vendas_pedido : id
-    
+
     mod_vendas_pedido {
-        int id_pedido pk
-        int id_users fk
-        int id_pagamento fk
-        datetime data_criacao
+        int id PK
+        int id_users FK
+        timestamp created_at
+        timestamp updated_at
     }
-    
-    mod_vendas_pedido ||--|{ mod_vendas_item_pedido : id_pedido
-    mod_vendas_pedido ||--|{ mod_vendas_pagamento : id_pagamento
-    
+
     mod_vendas_item_pedido {
-        int id_item_pedido pk
-        int id_pedido fk
-        int id_produto fk
+        int id PK
+        int id_pedido FK
+        int id_produto FK
         int quantidade
         int valor_unitario
+        timestamp created_at
+        timestamp updated_at
     }
-    
-    mod_vendas_item_pedido ||--|| mod_vendas_produto : id_produto
-    
+
     mod_vendas_produto {
-        int id_produto pk
+        int id PK
         string nome_produto
+        timestamp created_at
+        timestamp updated_at
     }
-    
+
     mod_vendas_pagamento {
-        int id_pagamento pk
-        int id_pedido fk
+        int id PK
+        int id_pedido FK
         int parcela_pagamento
         int valor_parcela
         datetime data_vencimento
+        timestamp created_at
+        timestamp updated_at
     }
 
-
-
-
-
-
+    users ||--o{ mod_vendas_pedido : "id_users"
+    mod_vendas_pedido ||--o{ mod_vendas_item_pedido : "id_pedido"
+    mod_vendas_pedido ||--o{ mod_vendas_pagamento : "id_pedido"
+    mod_vendas_produto ||--o{ mod_vendas_item_pedido : "id_produto"
 
 ```
