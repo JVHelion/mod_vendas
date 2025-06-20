@@ -488,6 +488,7 @@ document.getElementById("parcelasContainer").oninput = atualizarTotalParcelas;
 document.getElementById("confirmarPagamento").onclick = function () {
     let parcelas = [];
     let totalParcelas = 0;
+    let objParcelaValores = [];
     let valorParcelas = document.querySelectorAll(
         "#parcelasContainer > div > div > input"
     );
