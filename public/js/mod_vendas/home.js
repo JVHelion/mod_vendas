@@ -488,10 +488,24 @@ document.getElementById("parcelasContainer").oninput = atualizarTotalParcelas;
 document.getElementById("confirmarPagamento").onclick = function () {
     let parcelas = [];
     let totalParcelas = 0;
+    let valorParcelas = document.querySelectorAll(
+        "#parcelasContainer > div > div > input"
+    );
+    let valores = [];
+
+    valorParcelas.forEach((parcelaAvulsa) => {
+        valores.push(parcelaAvulsa.value);
+    });
+
+    for (let i = 0; i < valores.length; i += 2) {
+        objParcelaValores.push({ parcelas: valores[i], valor: valores[i + 1] });
+    }
+
     document.querySelectorAll("#parcelasContainer .row").forEach((row) => {
         const qtd = parseInt(row.querySelector(".parcela-qtd").value) || 0;
         const valor = row.querySelector(".parcela-valor").value;
-        const valorFloat = parseFloat(valor.replace(".", "").replace(",", ".")) || 0;
+        const valorFloat =
+            parseFloat(valor.replace(".", "").replace(",", ".")) || 0;
         if (qtd > 0 && valor) {
             parcelas.push({ qtd, valor });
             totalParcelas += qtd * valorFloat;
@@ -499,7 +513,10 @@ document.getElementById("confirmarPagamento").onclick = function () {
     });
 
     const totalVenda = parseFloat(
-        document.getElementById("total_da_linha").textContent.replace(".", "").replace(",", ".")
+        document
+            .getElementById("total_da_linha")
+            .textContent.replace(".", "")
+            .replace(",", ".")
     );
 
     if (Math.abs(totalParcelas - totalVenda) > 0.01) {
@@ -510,7 +527,9 @@ document.getElementById("confirmarPagamento").onclick = function () {
 
     enviarPedidoComPagamento(parcelas);
 
-    var modal = bootstrap.Modal.getInstance(document.getElementById("modalPagamento"));
+    var modal = bootstrap.Modal.getInstance(
+        document.getElementById("modalPagamento")
+    );
     modal.hide();
     mostrarSucesso();
 };
@@ -590,25 +609,50 @@ function enviarPedidoComPagamento(parcelas) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
         },
         body: JSON.stringify({
             cliente_id: document.getElementById("select_cliente").value,
-            pedidos: pedidos, 
-            parcelas: parcelas
+            pedidos: pedidos,
+            parcelas: parcelas,
         }),
     })
-    .then((response) => response.json())
-    .then((resposta) => {
-        mostrarSucesso();
-        pedidos = [];
-        atualizarTabelaPedidos();
-        // Limpe também as parcelas se desejar
-    })
-    .catch((erro) => {
-        mostrarFalha();
-        console.error("Erro ao enviar pedido", erro);
-    });
+        .then((response) => response.json())
+        .then((resposta) => {
+            if (resposta.success && resposta.pedido_id) {
+                const pagamentos = parcelas.map((parcela) => ({
+                    id_pedido: resposta.pedido_id,
+                    qtd: parcela.qtd,
+                    valor: parcela.valor,
+                }));
+
+                return fetch("/mod_vendas/criar_pagamento", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                    body: JSON.stringify({ pagamentos }),
+                });
+            } else {
+                throw new Error("Erro ao criar pedido");
+            }
+        })
+        .then((response) => (response ? response.json() : null))
+        .then((resposta2) => {
+            mostrarSucesso();
+            pedidos = [];
+            atualizarTabelaPedidos();
+            // Limpe também as parcelas se desejar
+        })
+        .catch((erro) => {
+            mostrarFalha();
+            console.error("Erro ao enviar pedido", erro);
+        });
 }
 
 /**

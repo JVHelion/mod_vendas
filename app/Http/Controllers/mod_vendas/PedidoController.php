@@ -29,7 +29,7 @@ class PedidoController extends Controller
                     'id_pedido' => $pedido->id,
                     'id_produto' => $item['produtoId'],
                     'quantidade' => $item['quantidade'],
-                    'valor_unitario' => str_replace(',', '.', $item['valorUnitario']),
+                    'valor_unitario' => (int) round(floatval(str_replace(',', '.', $item['valorUnitario'])) * 100),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
