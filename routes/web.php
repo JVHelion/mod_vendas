@@ -23,3 +23,4 @@ Route::group(['prefix' => 'mod_vendas'], function () {
         return response()->file(public_path('angular/hello-world-spa/index.html'));
     })->where('any', '.*');
 });
+
