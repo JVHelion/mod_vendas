@@ -7,7 +7,7 @@ use App\Http\Controllers\mod_vendas\PedidoController;
 use App\Http\Controllers\mod_vendas\PagamentoController;
 
 Route::get('/', function () {
-    return view('/mod_vendas/home');
+    return view('mod_vendas/home');
 });
 
 Route::group(['prefix' => 'mod_vendas'], function () {
@@ -19,8 +19,8 @@ Route::group(['prefix' => 'mod_vendas'], function () {
     Route::get('buscar_produtos', [ProdutoController::class, 'buscarProdutos']);
     Route::post('criar_pedido', [PedidoController::class, 'inserirPedidos']);
     Route::post('criar_pagamento', [PagamentoController::class, 'inserirPagamentos']);
-    Route::get('hello-world/{any?}', function () {
-        return response()->file(public_path('angular/hello-world-spa/index.html'));
-    })->where('any', '.*');
+    Route::get('hello-world', function () {
+        return view('mod_vendas.main');
+    });
 });
 
